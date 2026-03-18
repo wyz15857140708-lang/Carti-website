@@ -184,6 +184,7 @@
             z-index: 1;
             display: flex;
             pointer-events: none;
+            will-change: transform;
         }
         .marquee-inner {
             display: flex;
@@ -354,9 +355,9 @@
             font-size: 12px;
             text-transform: uppercase;
         }
-        .player-info { display: flex; align-items: center; gap: 20px; }
-        .player-status { width: 8px; height: 8px; background: #0f0; border-radius: 50%; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+        .player-info { display: flex; align-items: center; gap: 12px; }
+        .player-status { width: 8px; height: 8px; background: #0f0; border-radius: 50%; flex-shrink: 0; margin-top: 1px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
         .player-controls audio { height: 30px; outline: none; filter: invert(1) grayscale(1); }
 
         /* ═══ MASONRY GALLERY ═══ */
@@ -444,7 +445,7 @@
         
         /* ═══ SONIC EVOLUTION ═══ */
         .evolution-section { padding: 30vh 5vw; text-align: center; overflow: hidden; background: #000; position: relative; }
-        .evo-title { font-size: 12vw; letter-spacing: -0.05em; line-height: 0.8; margin-bottom: 5vh; transform-origin: center; cursor: none; font-weight: 900; text-transform: uppercase; }
+        .evo-title { font-size: 12vw; letter-spacing: -0.05em; line-height: 0.8; margin-bottom: 5vh; transform-origin: center; cursor: none; font-weight: 900; text-transform: uppercase; will-change: transform, scale; }
         .evo-desc { font-family: var(--font-mono); font-size: 14px; color: #666; max-width: 500px; margin: 0 auto; line-height: 1.6; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Viewfinder Cursor Class */
@@ -800,10 +801,11 @@
             });
         });
 
-        // 2.5 SKEW ON SCROLL
-        let proxy = { skew: 0 },
-            skewSetter = gsap.quickSetter(".text-reveal-inner, .roster-card img, .evo-title, .masonry-item img", "skewY", "deg"),
-            clamp = gsap.utils.clamp(-15, 15);
+        // 6. SCROLL VELOCITY SKEW
+        const skewElements = document.querySelectorAll('.year-title, .roster-name, .lookbook-sticky h2');
+        let proxy = { skew: 0 };
+        let skewSetter = gsap.quickSetter(skewElements, "skewY", "deg");
+        let clamp = gsap.utils.clamp(-5, 5); // Reduced max skew for stability
 
         ScrollTrigger.create({
             onUpdate: (self) => {
@@ -811,10 +813,10 @@
                 if (Math.abs(skew) > Math.abs(proxy.skew)) {
                     proxy.skew = skew;
                     gsap.to(proxy, {
-                        skew: 0, 
-                        duration: 0.8, 
-                        ease: "power3", 
-                        overwrite: true, 
+                        skew: 0,
+                        duration: 0.8,
+                        ease: "power3",
+                        overwrite: true,
                         onUpdate: () => skewSetter(proxy.skew)
                     });
                 }
