@@ -936,14 +936,47 @@
         const player = document.getElementById('global-player');
         const audioEl = document.getElementById('audio-el');
         const trackTitle = document.getElementById('player-track');
+        const playerStatus = document.querySelector('.player-status');
+
         document.querySelectorAll('.song-row').forEach(row => {
             row.addEventListener('click', () => {
                 const title = row.querySelector('.song-title').innerText;
-                trackTitle.innerText = `NOW PLAYING — ${title}`;
-                audioEl.src = row.getAttribute('data-src');
-                audioEl.play();
+                const src = row.getAttribute('data-src');
+                
+                trackTitle.innerText = `LOADING — ${title}`;
+                playerStatus.innerText = "BUFF";
+                
+                audioEl.src = src;
+                audioEl.load(); // Force reset of state machine
+                
+                // Show player immediately
                 gsap.to(player, { y: 0, duration: 0.8, ease: "power4.out" });
+
+                const playPromise = audioEl.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        trackTitle.innerText = `NOW PLAYING — ${title}`;
+                        playerStatus.innerText = "PLAY";
+                        console.log("Playback started successfully: ", src);
+                    }).catch(error => {
+                        trackTitle.innerText = `ERROR — ${title}`;
+                        playerStatus.innerText = "FAIL";
+                        console.error("Playback failed. Is the file corrupted or blocked? ", error);
+                    });
+                }
             });
+        });
+
+        // Diagnostic listener
+        audioEl.addEventListener('error', (e) => {
+            console.error("Audio Element Error:", audioEl.error);
+            const errorMap = {
+                1: "MEDIA_ERR_ABORTED",
+                2: "MEDIA_ERR_NETWORK",
+                3: "MEDIA_ERR_DECODE",
+                4: "MEDIA_ERR_SRC_NOT_SUPPORTED"
+            };
+            trackTitle.innerText = `SRC ERROR: ${errorMap[audioEl.error.code] || 'UNKNOWN'}`;
         });
 
         // 9. DECIPHER
