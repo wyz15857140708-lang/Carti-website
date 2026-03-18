@@ -981,7 +981,7 @@
                 playerStatus.innerText = "BUFF";
                 
                 audioEl.src = src;
-                audioEl.load(); // Force reset of state machine
+                log("Full Audio Path: " + audioEl.src);
                 
                 // Show player immediately
                 gsap.to(player, { y: 0, duration: 0.8, ease: "power4.out" });
@@ -991,11 +991,11 @@
                     playPromise.then(_ => {
                         trackTitle.innerText = `NOW PLAYING — ${title}`;
                         playerStatus.innerText = "PLAY";
-                        log("Playback Success: " + src);
+                        log("Playback Success");
                     }).catch(error => {
-                        trackTitle.innerText = `ERROR — ${title}`;
+                        trackTitle.innerText = `${error.name} — ${title}`;
                         playerStatus.innerText = "FAIL";
-                        log("Playback Fail: " + error.message);
+                        log("Playback Fail: " + error.name + " | " + error.message);
                     });
                 }
             });
