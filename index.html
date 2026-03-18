@@ -473,6 +473,21 @@
             .timeline-year { width: 80vw; }
             .masonry-grid { column-count: 1; }
         }
+        /* ═══ DEBUG LOGGER ═══ */
+        #debug-log {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: #0f0;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 10px;
+            z-index: 10000;
+            max-width: 300px;
+            pointer-events: none;
+            display: none; /* Hidden by default, show with ?debug=true or similar */
+        }
     </style>
 </head>
 <body>
@@ -722,6 +737,8 @@
         </table>
     </section>
 
+    <div id="debug-log">INIT: WAITING...</div>
+    
     <!-- GENERATOR -->
     <section class="gen-section" data-cursor="GENERATE">
         <div class="gen-label">ENCRYPTED PHRASE GENERATOR /// DECRYPT</div>
@@ -745,9 +762,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
     
     <script>
+        const debugEl = document.getElementById('debug-log');
+        function log(msg) {
+            console.log(msg);
+            if(debugEl) {
+                debugEl.style.display = 'block';
+                debugEl.innerText = msg + "\n" + debugEl.innerText;
+            }
+        }
+
+        log("CARTI ARCHIVE: Script Initializing...");
+
+        // Debug: Track all clicks
+        window.addEventListener('click', (e) => {
+            log("Click Target: " + e.target.tagName + " " + (e.target.className || ""));
+        });
+
         gsap.registerPlugin(ScrollTrigger);
 
-        // 1. LENIS
+        // 1. LENIS SMOOTH SCROLL
         let lenis;
         try {
             lenis = new Lenis({
@@ -942,6 +975,7 @@
             row.addEventListener('click', () => {
                 const title = row.querySelector('.song-title').innerText;
                 const src = row.getAttribute('data-src');
+                log("Song Clicked: " + title + " | Source: " + src);
                 
                 trackTitle.innerText = `LOADING — ${title}`;
                 playerStatus.innerText = "BUFF";
@@ -957,11 +991,11 @@
                     playPromise.then(_ => {
                         trackTitle.innerText = `NOW PLAYING — ${title}`;
                         playerStatus.innerText = "PLAY";
-                        console.log("Playback started successfully: ", src);
+                        log("Playback Success: " + src);
                     }).catch(error => {
                         trackTitle.innerText = `ERROR — ${title}`;
                         playerStatus.innerText = "FAIL";
-                        console.error("Playback failed. Is the file corrupted or blocked? ", error);
+                        log("Playback Fail: " + error.message);
                     });
                 }
             });
@@ -969,14 +1003,15 @@
 
         // Diagnostic listener
         audioEl.addEventListener('error', (e) => {
-            console.error("Audio Element Error:", audioEl.error);
             const errorMap = {
                 1: "MEDIA_ERR_ABORTED",
                 2: "MEDIA_ERR_NETWORK",
                 3: "MEDIA_ERR_DECODE",
                 4: "MEDIA_ERR_SRC_NOT_SUPPORTED"
             };
-            trackTitle.innerText = `SRC ERROR: ${errorMap[audioEl.error.code] || 'UNKNOWN'}`;
+            const msg = `SRC ERROR: ${errorMap[audioEl.error.code] || 'UNKNOWN'}`;
+            log(msg);
+            trackTitle.innerText = msg;
         });
 
         // 9. DECIPHER
