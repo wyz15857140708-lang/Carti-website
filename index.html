@@ -179,35 +179,78 @@
             left: 0;
             transform: translateY(-50%);
             white-space: nowrap;
-            font-size: clamp(80px, 15vw, 300px);
-            color: var(--text-color);
-            z-index: 1;
-            display: flex;
+            font-size: clamp(100px, 20vw, 400px);
+            font-weight: 900;
+            color: #fff;
+            z-index: 10;
+            mix-blend-mode: difference;
             pointer-events: none;
+            display: flex;
             will-change: transform;
         }
         .marquee-inner {
             display: flex;
-            gap: 2vw;
-            padding-right: 2vw;
+            gap: 5vw;
+            padding-right: 5vw;
         }
         .hero-img-wrap {
             position: absolute;
-            width: 30vw;
-            height: 45vh;
-            z-index: 2;
+            width: 35vw;
+            height: 50vh;
+            z-index: 1;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             border: 1px solid rgba(255,255,255,0.2);
             overflow: hidden;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #000;
         }
         .hero-img-wrap img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(1) contrast(1.2);
+            filter: grayscale(1) contrast(1.1);
+        }
+
+
+        /* ═══ NEW HERO ELEMENTS ═══ */
+        .hero-data {
+            position: absolute;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            z-index: 3;
+            letter-spacing: 1px;
+        }
+        .hd-tl { top: 12vh; left: 5vw; }
+        .hd-tr { top: 12vh; right: 5vw; text-align: right; }
+        .hd-bl { bottom: 12vh; left: 5vw; }
+        .hd-br { bottom: 12vh; right: 5vw; text-align: right; }
+        
+        .hero-vertical-ticker {
+            position: absolute;
+            right: 2vw;
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+            white-space: nowrap;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .hero-tag {
+            position: absolute;
+            left: 2vw;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: #666;
+            letter-spacing: 5px;
+            z-index: 1;
         }
 
         /* ═══ BIO (STICKY 2-COL) ═══ */
@@ -289,12 +332,14 @@
         }
         .year-num {
             position: absolute;
-            top: -2vw;
+            top: -2.5vw;
             left: -2vw;
             font-size: 8vw;
-            -webkit-text-stroke: 1px var(--text-color);
-            color: transparent;
+            color: #fff; /* Changed from transparent stroke to solid white */
+            font-weight: 900;
             z-index: 2;
+            text-shadow: 0 0 20px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.2);
+            mix-blend-mode: difference; /* Ensures visibility on both black and white areas */
         }
         .year-title {
             margin-top: 20px;
@@ -445,8 +490,24 @@
         
         /* ═══ SONIC EVOLUTION ═══ */
         .evolution-section { padding: 30vh 5vw; text-align: center; overflow: hidden; background: #000; position: relative; }
-        .evo-title { font-size: 12vw; letter-spacing: -0.05em; line-height: 0.8; margin-bottom: 5vh; transform-origin: center; cursor: none; font-weight: 900; text-transform: uppercase; will-change: transform, scale; }
-        .evo-desc { font-family: var(--font-mono); font-size: 14px; color: #666; max-width: 500px; margin: 0 auto; line-height: 1.6; text-transform: uppercase; letter-spacing: 1px; }
+        .evo-title { font-size: 12vw; letter-spacing: -0.05em; line-height: 0.8; margin-bottom: 5vh; transform-origin: center; cursor: none; font-weight: 900; text-transform: uppercase; will-change: transform, scale; position: relative; z-index: 2; }
+        .evo-desc { font-family: var(--font-mono); font-size: 14px; color: #666; max-width: 500px; margin: 0 auto; line-height: 1.6; text-transform: uppercase; letter-spacing: 1px; position: relative; z-index: 2; }
+        .evo-visual {
+            width: 100%;
+            height: 200px;
+            margin-top: 5vh;
+            position: relative;
+            z-index: 1;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+        .wave-path {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 3;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.4));
+        }
 
         /* Viewfinder Cursor Class */
         .cursor-dot.viewfinder {
@@ -501,6 +562,15 @@
 
     <!-- HERO -->
     <section class="hero">
+        <div class="hero-tag">IDENTITY / ARCHIVE</div>
+        <div class="hero-vertical-ticker">LIVE_FEED: ACCESSING_OPIUM_SERVERS... STATUS: ONLINE — ENCRYPTED — VOL_01 — ATLANTA_GA</div>
+        
+        <div class="hero-data hd-tl">BPM: 140<br>KEY: F MINOR</div>
+        <div class="hero-data hd-tr">LOC: 33.7490° N<br>84.3880° W</div>
+        <div class="hero-data hd-bl">DATE: 03.18.26<br>SYS: ACTIVATED</div>
+        <div class="hero-data hd-br">CAT: 001-MUSIC<br>TYPE: DIGITAL</div>
+
+        <!-- HERO MARQUEE -->
         <div class="hero-marquee" id="hero-marquee">
             <div class="marquee-inner">
                 <span>PLAYBOI CARTI — PLAYBOI CARTI — </span>
@@ -509,8 +579,9 @@
                 <span>PLAYBOI CARTI — PLAYBOI CARTI — </span>
             </div>
         </div>
-        <div class="hero-img-wrap" data-speed="1.1" id="hero-img">
-            <img src="carti-img/01_hero_main.jpg" alt="Carti Overview" fetchpriority="high">
+
+        <div class="hero-img-wrap" id="hero-img">
+            <img src="carti-img/01_hero_main.jpg" alt="Playboi Carti">
         </div>
     </section>
 
@@ -685,7 +756,11 @@
         <div class="evo-desc">
             EXPERIMENTING WITH VOCAL FREQUENCIES. FROM THE HIGH-PITCHED "BABY VOICE" OF THE PLUGG ERA TO THE GRITTY, INDUSTRIAL DEEP VOICE OF "I AM MUSIC". A CONSTANT STATE OF REINVENTION.
         </div>
-        <div class="divider-line"></div>
+        <div class="evo-visual">
+            <svg viewBox="0 0 1000 200" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+                <path class="wave-path" id="vocal-wave" d="M0,100 Q250,100 500,100 T1000,100" />
+            </svg>
+        </div>
     </section>
 
     <!-- TOUR -->
@@ -921,7 +996,9 @@
             }
         });
 
-        // 7.6 SONIC WARP
+        // 7.6 SONIC WARP & WAVE
+        const vocalWave = document.getElementById('vocal-wave');
+        
         gsap.to(".evo-title", {
             scrollTrigger: {
                 trigger: ".evolution-section",
@@ -932,6 +1009,28 @@
             scaleX: 1.4,
             skewX: 15,
             ease: "none"
+        });
+
+        // Wave Morphing Logic
+        ScrollTrigger.create({
+            trigger: ".evolution-section",
+            start: "top bottom",
+            end: "bottom top",
+            onUpdate: (self) => {
+                const p = self.progress;
+                // Transition from high frequency (many small waves) to low frequency (few large waves)
+                const lerp = (a, b, t) => a + (b - a) * t;
+                const freq = lerp(20, 2, p); 
+                const amp = lerp(20, 80, p);
+                
+                let d = "M0,100 ";
+                for (let i = 0; i <= 100; i++) {
+                    const x = i * 10;
+                    const y = 100 + Math.sin(i / freq * Math.PI * 2) * amp;
+                    d += `L${x},${y} `;
+                }
+                vocalWave.setAttribute('d', d);
+            }
         });
 
         // 8. PLAYER
@@ -996,34 +1095,32 @@
             }, 30);
         });
 
-        // 10. HERO EFFECTS
+        // 10. HERO EFFECTS (REVERTED SCROLL)
         const marqueeInners = document.querySelectorAll('.marquee-inner');
         
-        // Infinite Loop
+        // Infinite Marquee
         gsap.to(marqueeInners, {
             xPercent: -100,
             repeat: -1,
-            duration: 20,
+            duration: 15,
             ease: "none"
         });
 
-        // Mouse Parallax
         document.addEventListener('mousemove', (e) => {
             const { clientX, clientY } = e;
             const xPos = (clientX / window.innerWidth - 0.5) * 40;
             const yPos = (clientY / window.innerHeight - 0.5) * 40;
             
             gsap.to("#hero-marquee", {
-                x: xPos,
-                y: yPos,
-                duration: 1,
+                x: xPos * 0.5,
+                y: yPos * 0.5,
+                duration: 1.2,
                 ease: "power2.out"
             });
-            
             gsap.to("#hero-img", {
-                x: -xPos * 1.5,
-                y: -yPos * 1.5,
-                duration: 1.2,
+                x: -xPos,
+                y: -yPos,
+                duration: 1.5,
                 ease: "power3.out"
             });
         });
