@@ -1,1856 +1,1000 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PLAYBOI CARTI | Eras</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@300;400;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>CARTI ARCHIVE | VOL. 01</title>
+    
+    <!-- FONTS: Brutalist Contrast -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --font-title: 'Oswald', sans-serif;
-            --font-body: 'Roboto', sans-serif;
-            --ts: 0.8s;
+            --bg-color: #000000;
+            --text-color: #EAEAEA;
+            --accent: #FF0000;
+            --font-title: 'Inter', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --grid-gap: 20px;
         }
 
-        /* ═══ LOADER ═══ */
-        .loader-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 10000;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            transition: opacity 0.6s ease;
-        }
-
-        .loader-screen.hide {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loader-text {
-            font-family: var(--font-title);
-            font-size: 4rem;
-            color: #fff;
-            letter-spacing: 15px;
-            text-transform: uppercase;
-            animation: loaderPulse 1.2s ease infinite;
-        }
-
-        .loader-bar {
-            width: 200px;
-            height: 2px;
-            background: #222;
-            margin-top: 30px;
-            overflow: hidden;
-        }
-
-        .loader-bar-inner {
-            width: 0%;
-            height: 100%;
-            background: #ff1111;
-            animation: loaderFill 1.8s ease forwards;
-        }
-
-        @keyframes loaderFill {
-            to {
-                width: 100%;
-            }
-        }
-
-        @keyframes loaderPulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.4;
-            }
-        }
-
-        /* ═══ CURSOR ═══ */
-        .cursor-dot {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s, background-color var(--ts) ease;
-            mix-blend-mode: difference;
-        }
-
-        .cursor-ring {
-            position: fixed;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            border: 1.5px solid var(--accent-color);
-            pointer-events: none;
-            z-index: 9998;
-            transition: transform 0.15s ease-out, width 0.2s, height 0.2s, border-color var(--ts) ease;
-            mix-blend-mode: difference;
-        }
-
-        .cursor-ring.hover {
-            width: 55px;
-            height: 55px;
-            border-color: var(--text-color);
-        }
-
-        /* ═══ PROGRESS BAR ═══ */
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            z-index: 1000;
-            background: var(--accent-color);
-            width: 0%;
-            transition: background-color var(--ts) ease;
-        }
-
-        /* ═══ THEMES ═══ */
-        body.theme-intro {
-            --bg-color: #050505;
-            --text-color: #ffffff;
-            --text-muted: #888;
-            --accent-color: #8b0000;
-            --card-bg: rgba(20, 20, 20, 0.5);
-            --glow: rgba(139, 0, 0, 0.15);
-        }
-
-        body.theme-bio {
-            --bg-color: #0a0807;
-            --text-color: #f0e6d6;
-            --text-muted: #8a7d6d;
-            --accent-color: #c49b5c;
-            --card-bg: rgba(20, 18, 14, 0.8);
-            --glow: rgba(196, 155, 92, 0.1);
-        }
-
-        body.theme-songs {
-            --bg-color: #08060d;
-            --text-color: #e8e0f0;
-            --text-muted: #7a6b8a;
-            --accent-color: #9b59b6;
-            --card-bg: rgba(18, 14, 28, 0.8);
-            --glow: rgba(155, 89, 182, 0.12);
-        }
-
-        body.theme-dielit {
-            --bg-color: #e8e8e8;
-            --text-color: #050505;
-            --text-muted: #555;
-            --accent-color: #000;
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --glow: rgba(0, 0, 0, 0.05);
-        }
-
-        body.theme-wlr {
-            --bg-color: #0f0000;
-            --text-color: #fff;
-            --text-muted: #aa5555;
-            --accent-color: #ff0000;
-            --card-bg: rgba(20, 0, 0, 0.8);
-            --glow: rgba(255, 0, 0, 0.15);
-        }
-
-        body.theme-music {
-            --bg-color: #080a0c;
-            --text-color: #e0e5ea;
-            --text-muted: #5b6875;
-            --accent-color: #4a6fa5;
-            --card-bg: rgba(15, 18, 22, 0.8);
-            --glow: rgba(74, 111, 165, 0.1);
-        }
-
-        body.theme-opium {
-            --bg-color: #0d0a0b; /* Deep dark grey/red tint matching moody lighting */
-            --text-color: #f2e9e4;
-            --text-muted: #8a817c;
-            --accent-color: #bfa181; /* Desaturated gold/tan for chains/accents */
-            --card-bg: rgba(15, 12, 13, 0.8);
-            --glow: rgba(191, 161, 129, 0.08);
-        }
-
-        body.theme-live {
-            --bg-color: #050b14; /* Deep blue/teal matching the concert stage lights */
-            --text-color: #e0fbfc;
-            --text-muted: #98c1d9;
-            --accent-color: #3d5a80; /* Muted blue */
-            --card-bg: rgba(5, 11, 20, 0.85);
-            --glow: rgba(61, 90, 128, 0.15);
-        }
-
-        body.theme-gallery {
-            --bg-color: #110e0e; /* Very dark warm grey fitting the diverse portraits */
-            --text-color: #f5f5f5;
-            --text-muted: #8a8a8a;
-            --accent-color: #8c2727; /* Dark red aesthetic accent */
-            --card-bg: rgba(20, 15, 15, 0.8);
-            --glow: rgba(140, 39, 39, 0.1);
-        }
-
-        body.theme-influence {
-            --bg-color: #0c0808;
-            --text-color: #f5f0ea;
-            --text-muted: #a09080;
-            --accent-color: #cc4444;
-            --card-bg: rgba(22, 15, 15, 0.8);
-            --glow: rgba(204, 68, 68, 0.12);
-        }
-
-        body.theme-generator {
-            --bg-color: #0a0000;
-            --text-color: #fff;
-            --text-muted: #cc3333;
-            --accent-color: #ff1111;
-            --card-bg: rgba(30, 0, 0, 0.9);
-            --glow: rgba(255, 17, 17, 0.2);
-        }
-
+        /* ═══ GLOBAL RESET & LENIS ═══ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html.lenis, html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: var(--font-body);
+            font-family: var(--font-title);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
             overflow-x: hidden;
-            line-height: 1.6;
-            transition: background-color var(--ts) ease, color var(--ts) ease;
-            will-change: background-color, color;
+            -webkit-font-smoothing: antialiased;
             cursor: none;
         }
 
-        /* Noise overlay */
-        body::before {
-            content: "";
+        /* ═══ CUSTOM MAGNETIC CURSOR ═══ */
+        .cursor-dot {
+            position: fixed;
+            top: 0; left: 0;
+            width: 10px; height: 10px;
+            background: var(--text-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--bg-color);
+            text-align: center;
+            opacity: 0;
+        }
+        .cursor-dot.active {
+            width: 80px; height: 80px;
+            background: var(--text-color);
+            mix-blend-mode: normal;
+        }
+
+        /* ═══ 0-100 SPLIT LOADER ═══ */
+        .loader {
             position: fixed;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-            opacity: 0.06;
-            pointer-events: none;
-            z-index: 999;
-            mix-blend-mode: overlay;
-            transform: translateZ(0);
+            background: var(--text-color);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
         }
-
-        /* Ambient glow that follows theme */
-        body::after {
-            content: "";
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, var(--glow) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, var(--glow) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
-            transition: background var(--ts) ease;
-            will-change: transform, background;
-            animation: ambientDrift 12s ease-in-out infinite alternate;
+        .loader-percent {
+            font-family: var(--font-mono);
+            font-size: 12vw;
+            color: var(--bg-color);
+            font-weight: 700;
+            line-height: 1;
         }
-
-        @keyframes ambientDrift {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-
-            100% {
-                transform: translate(3%, 2%) rotate(3deg);
-            }
-        }
-
-        a,
-        button {
-            text-decoration: none;
-            color: var(--text-color);
-            transition: color 0.3s ease, transform 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, top 0.3s ease, left 0.3s ease;
-            cursor: none;
-        }
-
-        h1,
-        h2,
-        h3,
-        .title-font {
-            font-family: var(--font-title);
+        .loader-label {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--bg-color);
             text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 10px;
         }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
+        /* ═══ 4-CORNER FIXED NAV ═══ */
+        .nav-corner {
+            position: fixed;
+            z-index: 9000;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            mix-blend-mode: difference;
+            pointer-events: none;
+        }
+        .nav-tl { top: 30px; left: 30px; }
+        .nav-tr { top: 30px; right: 30px; text-align: right; }
+        .nav-bl { bottom: 30px; left: 30px; }
+        .nav-br { bottom: 30px; right: 30px; text-align: right;}
+
+        /* Brutalist Crosshairs */
+        .crosshair {
+            position: fixed;
+            width: 15px; height: 15px;
+            z-index: 8999;
+            pointer-events: none;
+            mix-blend-mode: difference;
+        }
+        .crosshair::before, .crosshair::after { content: ''; position: absolute; background: var(--text-color); }
+        .crosshair::before { width: 100%; height: 1px; top: 50%; left: 0; transform: translateY(-50%); }
+        .crosshair::after { width: 1px; height: 100%; left: 50%; top: 0; transform: translateX(-50%); }
+
+        .ch-tl { top: 60px; left: 60px; }
+        .ch-tr { top: 60px; right: 60px; }
+        .ch-bl { bottom: 60px; left: 60px; }
+        .ch-br { bottom: 60px; right: 60px; }
+
+        /* ═══ TYPOGRAPHY UTILS ═══ */
+        .text-reveal {
+            overflow: hidden;
+            display: inline-block;
+        }
+        .text-reveal-inner {
+            display: inline-block;
+            transform: translateY(110%);
+        }
+        h1, h2, h3 { font-weight: 900; line-height: 0.9; text-transform: uppercase; letter-spacing: -0.04em; }
+        
+        .divider-line {
+            width: 100%;
+            height: 1px;
+            background: rgba(234, 234, 234, 0.2);
+            margin: 15vh 0;
         }
 
-        section {
-            min-height: 100vh;
-            padding: 100px 20px;
+        /* ═══ HERO SECTION ═══ */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .hero-marquee {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            font-size: clamp(80px, 15vw, 300px);
+            color: var(--text-color);
+            z-index: 1;
+            display: flex;
+            pointer-events: none;
+        }
+        .marquee-inner {
+            display: flex;
+            gap: 2vw;
+            padding-right: 2vw;
+        }
+        .hero-img-wrap {
+            position: absolute;
+            width: 30vw;
+            height: 45vh;
+            z-index: 2;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(255,255,255,0.2);
+            overflow: hidden;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(1) contrast(1.2);
+        }
+
+        /* ═══ BIO (STICKY 2-COL) ═══ */
+        .bio-section {
+            padding: 20vh 5vw;
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: 5vw;
+        }
+        .bio-left {
+            position: sticky;
+            top: 20vh;
+            height: fit-content;
+        }
+        .bio-left h2 {
+            font-size: 6vw;
+        }
+        .bio-right {
+            padding-top: 10vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            position: relative;
+            gap: 10vh;
         }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            width: 100%;
+        .bio-text p {
+            font-size: 2vw;
+            line-height: 1.4;
+            font-weight: 400;
+            color: #aaa;
+            max-width: 80%;
+            margin-bottom: 2rem;
         }
-
-        .section-title {
-            font-size: 5rem;
-            color: var(--text-color);
-            margin-bottom: 3rem;
-            letter-spacing: -2px;
-            border-bottom: 2px solid var(--accent-color);
-            display: inline-block;
-            transition: border-color var(--ts) ease, color var(--ts) ease;
-        }
-
-        /* ═══ SECTION DIVIDERS ═══ */
-        .section-divider {
-            width: 100%;
-            height: 80px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .section-divider::before {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 60%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-            transition: background var(--ts) ease;
-        }
-
-        .section-divider .divider-symbol {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            font-family: var(--font-title);
-            font-size: 1.2rem;
-            color: var(--accent-color);
-            background: var(--bg-color);
-            padding: 0 20px;
-            letter-spacing: 5px;
-            transition: color var(--ts) ease, background var(--ts) ease;
-        }
-
-        /* ═══ ANIMATIONS ═══ */
-        .anim-element {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: transform, opacity;
-        }
-
-        .anim-element.visible {
-            opacity: 1;
-            transform: translate(0);
-        }
-
-        .anim-element:nth-child(2) {
-            transition-delay: 0.1s;
-        }
-
-        .anim-element:nth-child(3) {
-            transition-delay: 0.2s;
-        }
-
-        .anim-element:nth-child(4) {
-            transition-delay: 0.3s;
-        }
-
-        /* ═══ BUTTONS ═══ */
-        .btn {
-            background: transparent;
-            color: var(--text-color);
-            border: 2px solid var(--accent-color);
-            padding: 15px 40px;
-            font-family: var(--font-title);
-            font-size: 1.2rem;
-            cursor: none;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            will-change: transform;
-        }
-
-        .btn::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: var(--accent-color);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s ease, height 0.4s ease;
-            z-index: -1;
-        }
-
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn:hover {
-            color: var(--bg-color);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--glow);
-        }
-
-        /* ═══ HERO ═══ */
-        #hero {
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .hero-img {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50vw;
-            max-width: 600px;
-            opacity: 0.2;
-            z-index: -1;
-            filter: grayscale(100%) contrast(1.2);
-            transition: opacity 0.5s ease;
-        }
-
-        .hero-title {
-            font-size: 10vw;
-            letter-spacing: -5px;
-            line-height: 0.9;
-            margin-bottom: 20px;
-            transition: color var(--ts) ease;
-            text-shadow: 0 0 80px var(--glow);
-        }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            letter-spacing: 8px;
-            color: var(--text-muted);
-            margin-bottom: 50px;
-        }
-
-        /* Floating particles in hero */
-        .hero-particles {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            opacity: 0.4;
-            animation: particleFloat linear infinite;
-        }
-
-        @keyframes particleFloat {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-
-            10% {
-                opacity: 0.6;
-            }
-
-            90% {
-                opacity: 0.6;
-            }
-
-            100% {
-                transform: translateY(-10vh) scale(1);
-                opacity: 0;
-            }
-        }
-
-        /* ═══ ERA / CONTENT ═══ */
-        .era-content {
+        .bio-metadata {
             display: flex;
-            flex-wrap: wrap;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .era-content.reverse {
-            flex-direction: row-reverse;
-        }
-
-        .era-text {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .era-text h3 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--accent-color);
-            transition: color var(--ts) ease;
-        }
-
-        .era-text p {
-            font-size: 1.15rem;
-            margin-bottom: 18px;
-            color: var(--text-muted);
-            line-height: 1.8;
-            transition: color var(--ts) ease;
-        }
-
-        .era-visual {
-            flex: 1;
-            min-width: 280px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .era-visual img {
-            width: 100%;
-            filter: grayscale(0.2);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
-        }
-
-        .era-visual:hover img {
-            transform: scale(1.05);
-            filter: grayscale(0);
-        }
-
-        /* Image frame accent */
-        .era-visual::after {
-            content: "";
-            position: absolute;
-            inset: 8px;
-            border: 1px solid var(--accent-color);
-            opacity: 0;
-            transition: opacity 0.4s ease, inset 0.4s ease, border-color var(--ts) ease;
-            pointer-events: none;
-        }
-
-        .era-visual:hover::after {
-            opacity: 0.5;
-            inset: 15px;
-        }
-
-        /* ═══ BIO STATS ═══ */
-        .bio-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px 30px;
-            margin-bottom: 25px;
-        }
-
-        .bio-stat {
-            border-left: 3px solid var(--accent-color);
-            padding-left: 12px;
-            transition: border-color var(--ts) ease, transform 0.3s ease;
-        }
-
-        .bio-stat:hover {
-            transform: translateX(5px);
-        }
-
-        .bio-stat .label {
-            font-family: var(--font-title);
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            transition: color var(--ts) ease;
-        }
-
-        .bio-stat .value {
-            font-size: 1.1rem;
-            color: var(--text-color);
-            transition: color var(--ts) ease;
-        }
-
-        /* ═══ SONGS ═══ */
-        .songs-grid {
-            display: grid;
-            gap: 12px;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .song-item {
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 20px;
-            padding: 16px 20px;
-            background: var(--card-bg);
-            border: 1px solid transparent;
-            border-left: 3px solid var(--accent-color);
-            cursor: none;
-            transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 20px;
+        }
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .meta-label { color: #555; }
+
+        /* ═══ HORIZONTAL TIMELINE ═══ */
+        .timeline-wrapper {
+            width: 100%;
+            height: 100vh;
             position: relative;
             overflow: hidden;
         }
-
-        .song-item::before {
-            content: "";
+        .timeline-container {
             position: absolute;
-            left: 0;
-            top: 0;
-            width: 0;
+            top: 0; left: 0;
             height: 100%;
-            background: var(--glow);
-            transition: width 0.4s ease;
+            display: flex;
+            align-items: center;
+            padding: 0 10vw;
+            gap: 15vw;
+            width: max-content;
         }
-
-        .song-item:hover::before {
-            width: 100%;
-        }
-
-        .song-item:hover {
-            border-color: var(--accent-color);
-            transform: translateX(8px);
-        }
-
-        .song-item.active-song {
-            border-color: var(--accent-color);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .song-item.active-song .song-num {
-            animation: eqBounce 0.6s ease infinite alternate;
-        }
-
-        @keyframes eqBounce {
-            0% {
-                transform: scaleY(0.6);
-            }
-
-            100% {
-                transform: scaleY(1.2);
-            }
-        }
-
-        .song-num {
-            font-family: var(--font-title);
-            font-size: 2rem;
-            color: var(--accent-color);
-            min-width: 40px;
-            transition: color var(--ts) ease;
-            position: relative;
-            z-index: 1;
-        }
-
-        .song-info {
-            flex: 1;
-            position: relative;
-            z-index: 1;
-        }
-
-        .song-title {
-            font-family: var(--font-title);
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-        }
-
-        .song-album {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            transition: color var(--ts) ease;
-        }
-
-        .song-play {
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            transition: color 0.3s;
-            position: relative;
-            z-index: 1;
-        }
-
-        .song-item:hover .song-play {
-            color: var(--accent-color);
-        }
-
-        .audio-player-wrap {
-            max-width: 700px;
-            margin: 25px auto 0;
-            padding: 15px 20px;
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            transition: background-color 0.3s ease;
-            transform: translateZ(0);
-        }
-
-        .audio-player-wrap audio {
-            width: 100%;
-            height: 36px;
-            filter: invert(1) hue-rotate(180deg);
-            opacity: 0.8;
-        }
-
-        .now-playing-label {
-            font-family: var(--font-title);
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            color: var(--accent-color);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            transition: color var(--ts) ease;
-        }
-
-        /* ═══ TIMELINE ═══ */
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            padding-left: 30px;
-        }
-
-        .timeline::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 2px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 50px;
-            padding-left: 30px;
-            transition: transform 0.3s ease;
-        }
-
-        .timeline-item:hover {
-            transform: translateX(10px);
-        }
-
-        .timeline-item::before {
-            content: "";
-            position: absolute;
-            left: -34px;
-            top: 0;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            border: 3px solid var(--bg-color);
-            transition: all var(--ts) ease;
-        }
-
-        .timeline-item:hover::before {
-            transform: scale(1.5);
-            box-shadow: 0 0 10px var(--accent-color);
-        }
-
         .timeline-year {
-            font-family: var(--font-title);
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            margin-bottom: 5px;
-            letter-spacing: 2px;
-        }
-
-        .timeline-title {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .timeline-desc {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        /* ═══ OPIUM ROSTER ═══ */
-        .roster-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .roster-card {
+            flex-shrink: 0;
+            width: 40vw;
             position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            background: var(--card-bg);
-            text-align: center;
-            overflow: hidden;
-            transition: transform 0.4s ease, border-color 0.4s;
         }
-
-        .roster-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-color);
-        }
-
-        .roster-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
+        .timeline-year img {
+            width: 100%;
+            aspect-ratio: 3/4;
             object-fit: cover;
-            margin: 0 auto 15px;
             filter: grayscale(1);
-            transition: filter 0.4s;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: filter 0.5s;
         }
-
-        .roster-card:hover .roster-img {
+        .timeline-year[data-cursor="VIEW"]:hover img {
             filter: grayscale(0);
         }
-
-        .roster-name {
-            font-family: var(--font-title);
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .roster-role {
-            font-size: 0.8rem;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* ═══ LIVE EXPERIENCE ═══ */
-        .tour-dates {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            border-collapse: collapse;
-        }
-
-        .tour-dates tr {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: background 0.3s;
-        }
-
-        .tour-dates tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom-color: var(--accent-color);
-        }
-
-        .tour-dates td {
-            padding: 20px 10px;
-            vertical-align: middle;
-        }
-
-        .tour-date {
-            font-family: var(--font-title);
-            color: var(--accent-color);
-            width: 120px;
-        }
-
-        .tour-city {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .tour-venue {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .tour-btn-td {
-            text-align: right;
-        }
-
-        /* ═══ GALLERY MASONRY ═══ */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            aspect-ratio: 1;
-            background: #111;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(0.8) brightness(0.8);
-            transition: transform 0.6s ease, filter 0.6s ease;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-            filter: grayscale(0) brightness(1);
-        }
-
-        .gallery-overlay {
+        .year-num {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 60%);
-            display: flex;
-            align-items: flex-end;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.3s;
+            top: -2vw;
+            left: -2vw;
+            font-size: 8vw;
+            -webkit-text-stroke: 1px var(--text-color);
+            color: transparent;
+            z-index: 2;
         }
-
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
-
-        .gallery-caption {
-            font-family: var(--font-title);
-            color: var(--text-color);
-            letter-spacing: 1px;
-        }
-
-        /* ═══ INFLUENCE ═══ */
-        .influence-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+        .year-title {
             margin-top: 20px;
-        }
-
-        .influence-card {
-            padding: 30px 25px;
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-top: 3px solid var(--accent-color);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color var(--ts) ease, box-shadow 0.4s ease, background-color var(--ts) ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .influence-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--glow) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .influence-card:hover::before {
-            opacity: 1;
-        }
-
-        .influence-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .influence-card .card-icon {
             font-size: 2rem;
-            color: var(--accent-color);
-            margin-bottom: 15px;
-            transition: color var(--ts) ease, transform 0.3s;
-            position: relative;
-            z-index: 1;
         }
-
-        .influence-card:hover .card-icon {
-            transform: scale(1.15) rotate(-5deg);
-        }
-
-        .influence-card h4 {
-            font-family: var(--font-title);
-            font-size: 1.4rem;
-            margin-bottom: 12px;
+        .year-desc {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: #888;
+            margin-top: 10px;
+            max-width: 80%;
             text-transform: uppercase;
-            position: relative;
-            z-index: 1;
         }
 
-        .influence-card p {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-            transition: color var(--ts) ease;
-            position: relative;
-            z-index: 1;
+        /* ═══ SONGS INDEX ═══ */
+        .songs-section {
+            padding: 10vh 5vw 30vh 5vw;
         }
-
-        /* ═══ QUOTES STRIP ═══ */
-        .quotes-strip {
-            overflow: hidden;
-            white-space: nowrap;
-            padding: 30px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        .songs-header {
+            font-size: 5vw;
+            margin-bottom: 10vh;
         }
-
-        .quotes-track {
-            display: inline-block;
-            animation: marqueeScroll 20s linear infinite;
-        }
-
-        .quotes-track span {
-            font-family: var(--font-title);
-            font-size: 2.5rem;
-            color: var(--text-muted);
-            margin: 0 40px;
-            transition: color var(--ts) ease;
-            letter-spacing: 5px;
-            opacity: 0.4;
-        }
-
-        @keyframes marqueeScroll {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        /* ═══ GENERATOR ═══ */
-        #generator {
-            text-align: center;
+        .song-row {
+            display: flex;
             align-items: center;
-            min-height: 80vh;
-        }
-
-        #phrase-display {
-            font-size: 6vw;
-            font-family: var(--font-title);
-            color: var(--accent-color);
-            min-height: 120px;
-            margin-top: 50px;
-            text-transform: uppercase;
-            transition: color var(--ts) ease;
-            letter-spacing: 5px;
-        }
-
-        #phrase-display.glitching {
-            animation: phraseGlitch 0.1s steps(2) infinite;
-        }
-
-        @keyframes phraseGlitch {
-            0% {
-                text-shadow: 3px 0 #0ff, -3px 0 #f0f;
-                transform: skewX(5deg);
-            }
-
-            25% {
-                text-shadow: -3px 0 #f0f, 3px 0 #0ff;
-                transform: skewX(-3deg) scaleY(1.02);
-            }
-
-            50% {
-                text-shadow: 2px 2px #ff0, -2px -2px #0ff;
-                transform: skewX(2deg);
-            }
-
-            75% {
-                text-shadow: -2px 0 #f00, 2px 0 #0f0;
-                transform: skewX(-5deg) scaleY(0.98);
-            }
-
-            100% {
-                text-shadow: 3px -2px #f0f, -3px 2px #0ff;
-                transform: skewX(3deg);
-            }
-        }
-
-        .gen-btn-wrap {
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             position: relative;
-            display: inline-block;
-        }
-
-        .gen-btn {
-            background: transparent;
-            color: var(--text-color);
-            border: 2px solid var(--accent-color);
-            padding: 18px 60px;
-            font-family: var(--font-title);
-            font-size: 1.5rem;
+            overflow: hidden;
             cursor: none;
-            letter-spacing: 5px;
+            transition: color 0.4s;
+        }
+        .song-row::after {
+            content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 0%;
+            background: var(--text-color); z-index: -1; transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .song-row:hover::after { height: 100%; }
+        .song-row:hover { color: var(--bg-color); }
+        .song-row:hover .song-num, .song-row:hover .song-album { color: var(--bg-color); }
+        
+        .song-num { font-family: var(--font-mono); font-size: 14px; width: 10%; color: #666; transition: color 0.4s; }
+        .song-title { font-size: 3vw; font-weight: 700; width: 60%; }
+        .song-album { font-family: var(--font-mono); font-size: 14px; width: 30%; text-align: right; color: #888; transition: color 0.4s; }
+
+        /* ═══ BOTTOM GLOBAL PLAYER ═══ */
+        .global-player {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: #111;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding: 20px 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transform: translateY(100%);
+            z-index: 9998;
+            font-family: var(--font-mono);
+            font-size: 12px;
             text-transform: uppercase;
-            transition: all 0.15s ease;
+        }
+        .player-info { display: flex; align-items: center; gap: 20px; }
+        .player-status { width: 8px; height: 8px; background: #0f0; border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+        .player-controls audio { height: 30px; outline: none; filter: invert(1) grayscale(1); }
+
+        /* ═══ MASONRY GALLERY ═══ */
+        .gallery-section { padding: 10vh 5vw; }
+        .masonry-grid {
+            column-count: 2;
+            column-gap: 20px;
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 20px;
             position: relative;
+            overflow: hidden;
+        }
+        .masonry-item img {
+            width: 100%;
+            display: block;
+            filter: grayscale(1);
+            transition: filter 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .masonry-item[data-cursor="VIEW"]:hover img { filter: grayscale(0); transform: scale(1.05); }
+        .masonry-label {
+            position: absolute;
+            bottom: 15px; left: 15px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 4px 8px;
+            text-transform: uppercase;
             z-index: 2;
         }
 
-        .gen-btn:hover {
-            background: var(--accent-color);
-            color: var(--bg-color);
-            box-shadow: 0 0 30px var(--accent-color), 0 0 60px var(--glow);
-            transform: scale(1.05);
-            letter-spacing: 8px;
-        }
+        /* ═══ TOUR SCHEDULE ═══ */
+        .tour-section { padding: 10vh 5vw; }
+        .tour-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 14px; text-transform: uppercase; }
+        .tour-table th { text-align: left; padding: 20px 0; border-bottom: 1px solid #fff; color: #666; font-weight: 400; }
+        .tour-table td { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .tour-status { display: inline-block; padding: 4px 8px; border: 1px solid #333; }
+        .tour-status.sold-out { background: var(--text-color); color: var(--bg-color); }
 
-        .gen-btn:active {
-            transform: scale(0.95);
-            letter-spacing: 3px;
-        }
-
-        .gen-btn-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            background: var(--accent-color);
-            filter: blur(40px);
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 1;
-        }
-
-        .gen-btn-wrap:hover .gen-btn-glow {
-            opacity: 0.3;
-        }
-
-        /* ═══ FOOTER ═══ */
-        footer {
-            padding: 40px 20px;
-            text-align: center;
-            border-top: 1px solid var(--accent-color);
-            transition: border-color var(--ts) ease, background-color var(--ts) ease;
-            min-height: auto;
-        }
-
-        footer p {
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
-
-        footer a {
-            font-size: 1.5rem;
-            margin: 0 15px;
-            color: var(--text-muted);
-            transition: all 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--accent-color);
-            transform: translateY(-3px) scale(1.1);
-            display: inline-block;
-        }
-
-        /* ═══ SCROLL INDICATOR ═══ */
-        .scroll-indicator {
-            position: fixed;
-            right: 25px;
-            top: 50%;
-            transform: translateY(-50%);
+        /* ═══ GENERATOR ═══ */
+        .gen-section {
+            height: 80vh;
             display: flex;
+            align-items: center;
+            justify-content: center;
             flex-direction: column;
-            gap: 12px;
-            z-index: 100;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--text-muted);
-            transition: all 0.3s ease;
+        .gen-phrase {
+            font-size: 6vw;
+            letter-spacing: -2px;
+            margin-bottom: 40px;
             cursor: none;
+            width: 100%;
+            text-align: center;
+        }
+        .gen-label {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
         }
 
-        .dot.active {
-            background-color: var(--accent-color);
-            transform: scale(1.8);
-            box-shadow: 0 0 8px var(--accent-color);
+        /* ═══ OPIUM ROSTER ═══ */
+        .roster-section { padding: 20vh 5vw; background: #050505; border-top: 1px solid rgba(255,255,255,0.1); }
+        .roster-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vw; margin-top: 10vh; }
+        .roster-card { position: relative; overflow: hidden; height: 80vh; border: 1px solid rgba(255,255,255,0.05); cursor: none; }
+        .roster-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: filter 0.5s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .roster-card:hover img { filter: grayscale(0); transform: scale(1.05); }
+        .roster-info { position: absolute; bottom: 40px; left: 40px; z-index: 2; pointer-events: none; }
+        .roster-name { font-size: 4vw; font-weight: 900; line-height: 0.8; text-transform: uppercase; }
+        .roster-alias { font-family: var(--font-mono); font-size: 12px; color: #666; margin-top: 15px; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* ═══ FASHION LOOKBOOK ═══ */
+        .lookbook-section { padding: 20vh 5vw; display: grid; grid-template-columns: 5fr 7fr; gap: 8vw; align-items: start; }
+        .lookbook-sticky { position: sticky; top: 15vh; }
+        .lookbook-sticky h2 { font-size: 10vw; -webkit-text-stroke: 1px rgba(255,255,255,0.2); color: transparent; line-height: 0.85; }
+        .lookbook-gallery { display: flex; flex-direction: column; gap: 20vh; }
+        .lookbook-item { width: 100%; position: relative; cursor: none; }
+        .lookbook-item img { width: 100%; filter: contrast(1.1) grayscale(0.5); transition: filter 0.5s; }
+        .lookbook-item:hover img { filter: contrast(1.2) grayscale(0); }
+        .lookbook-caption { margin-top: 25px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: #555; display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        
+        /* ═══ SONIC EVOLUTION ═══ */
+        .evolution-section { padding: 30vh 5vw; text-align: center; overflow: hidden; background: #000; position: relative; }
+        .evo-title { font-size: 12vw; letter-spacing: -0.05em; line-height: 0.8; margin-bottom: 5vh; transform-origin: center; cursor: none; font-weight: 900; text-transform: uppercase; }
+        .evo-desc { font-family: var(--font-mono); font-size: 14px; color: #666; max-width: 500px; margin: 0 auto; line-height: 1.6; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Viewfinder Cursor Class */
+        .cursor-dot.viewfinder {
+            width: 150px; height: 150px;
+            border-radius: 0;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            mix-blend-mode: normal;
+        }
+        .cursor-dot.viewfinder::before {
+            content: 'LENS_01';
+            position: absolute;
+            top: -20px; left: 0;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-color);
         }
 
-        /* ═══ RESPONSIVE ═══ */
+        /* Responsive Fixes */
         @media (max-width: 768px) {
-            .section-title {
-                font-size: 3rem;
-            }
-
-            .hero-title {
-                font-size: 15vw;
-            }
-
-            .scroll-indicator,
-            .cursor-dot,
-            .cursor-ring {
-                display: none;
-            }
-
-            body {
-                cursor: auto;
-            }
-
-            a,
-            button,
-            .song-item,
-            .gen-btn,
-            .btn,
-            .dot {
-                cursor: auto;
-            }
-
-            .influence-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .bio-stats {
-                grid-template-columns: 1fr;
-            }
-
-            #phrase-display {
-                font-size: 10vw;
-            }
-
-            .quotes-track span {
-                font-size: 1.5rem;
-            }
+            .bio-section { grid-template-columns: 1fr; }
+            .bio-left h2 { font-size: 12vw; }
+            .hero-marquee { font-size: 30vw; }
+            .song-title { font-size: 5vw; }
+            .timeline-year { width: 80vw; }
+            .masonry-grid { column-count: 1; }
         }
     </style>
 </head>
-
-<body class="theme-intro">
-
-    <!-- LOADER -->
-    <div class="loader-screen" id="loader">
-        <div class="loader-text">KING VAMP</div>
-        <div class="loader-bar">
-            <div class="loader-bar-inner"></div>
-        </div>
-    </div>
+<body>
 
     <!-- CUSTOM CURSOR -->
-    <div class="cursor-dot" id="cursor-dot"></div>
-    <div class="cursor-ring" id="cursor-ring"></div>
+    <div class="cursor-dot" id="cursor"></div>
 
-    <!-- SCROLL PROGRESS -->
-    <div class="scroll-progress" id="scroll-progress"></div>
-
-    <!-- SCROLL INDICATOR -->
-    <div class="scroll-indicator">
-        <div class="dot active" data-target="hero"></div>
-        <div class="dot" data-target="bio"></div>
-        <div class="dot" data-target="timeline"></div>
-        <div class="dot" data-target="songs"></div>
-        <div class="dot" data-target="dielit"></div>
-        <div class="dot" data-target="wlr"></div>
-        <div class="dot" data-target="music"></div>
-        <div class="dot" data-target="opium"></div>
-        <div class="dot" data-target="live"></div>
-        <div class="dot" data-target="gallery"></div>
-        <div class="dot" data-target="influence"></div>
-        <div class="dot" data-target="generator"></div>
+    <!-- 0-100 LOADER -->
+    <div class="loader">
+        <div class="loader-percent" id="loader-perc">000</div>
+        <div class="loader-label">INITIALIZING ARCHIVE</div>
     </div>
 
-    <!-- ═══════════ HERO ═══════════ -->
-    <section id="hero" data-theme="intro">
-        <div class="hero-particles" id="hero-particles"></div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Playboi_Carti_2016.jpg" alt="Carti"
-            class="hero-img">
-        <div class="container">
-            <h1 class="hero-title anim-element">PLAYBOI CARTI</h1>
-            <p class="hero-subtitle title-font anim-element">The Evolution of Sound</p>
-            <button class="btn anim-element" id="enter-btn">Explore</button>
+    <!-- 4 CORNER NAV -->
+    <div class="nav-corner nav-tl">CARTI ARCHIVE<br>VOL. 01</div>
+    <div class="nav-corner nav-tr">EST. 1996<br>ATLANTA, GA</div>
+    <div class="nav-corner nav-bl">SCROLL DOWN<br>↓</div>
+    <div class="nav-corner nav-br" id="time-nav">00:00:00</div>
+
+    <!-- CROSSHAIRS -->
+    <div class="crosshair ch-tl"></div>
+    <div class="crosshair ch-tr"></div>
+    <div class="crosshair ch-bl"></div>
+    <div class="crosshair ch-br"></div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-marquee" id="hero-marquee">
+            <div class="marquee-inner">
+                <span>PLAYBOI CARTI — PLAYBOI CARTI — </span>
+            </div>
+            <div class="marquee-inner">
+                <span>PLAYBOI CARTI — PLAYBOI CARTI — </span>
+            </div>
+        </div>
+        <div class="hero-img-wrap" data-speed="1.1" id="hero-img">
+            <img src="carti-img/01_hero_main.jpg" alt="Carti Overview" fetchpriority="high">
         </div>
     </section>
 
-    <!-- DIVIDER -->
-    <div class="section-divider">
-        <div class="divider-symbol">✦ ✦ ✦</div>
-    </div>
-
-    <!-- ═══════════ BIO ═══════════ -->
-    <section id="bio" data-theme="bio">
-        <div class="container">
-            <h2 class="section-title anim-element">Who Is Carti</h2>
-            <div class="era-content">
-                <div class="era-visual anim-element">
-                    <img src="carti-img/carti-iverson.webp" alt="Playboi Carti" loading="lazy"
-                        onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/7/7a/Playboi_Carti_2016.jpg'">
-                </div>
-                <div class="era-text anim-element">
-                    <h3>Jordan Terrell Carter</h3>
-                    <div class="bio-stats">
-                        <div class="bio-stat">
-                            <div class="label">Born</div>
-                            <div class="value">September 13, 1996</div>
-                        </div>
-                        <div class="bio-stat">
-                            <div class="label">Origin</div>
-                            <div class="value">Atlanta, Georgia</div>
-                        </div>
-                        <div class="bio-stat">
-                            <div class="label">Label</div>
-                            <div class="value">Opium / Interscope</div>
-                        </div>
-                        <div class="bio-stat">
-                            <div class="label">Genre</div>
-                            <div class="value">Rage · Trap · Punk Rap</div>
-                        </div>
-                    </div>
-                    <p>Playboi Carti rose from Atlanta's underground scene with a style built on hypnotic ad-libs,
-                        minimalist flows, and atmospheric production that redefined what hip-hop could sound like.</p>
-                    <p>Beyond music, he became a cultural force — fusing punk attitude, gothic fashion, and internet
-                        mystique into a persona that influenced an entire generation of artists, designers, and fans
-                        worldwide.</p>
-                </div>
+    <!-- BIO -->
+    <section class="bio-section">
+        <div class="bio-left">
+            <h2><span class="text-reveal"><span class="text-reveal-inner">WHO IS</span></span><br><span class="text-reveal"><span class="text-reveal-inner">CARTI</span></span></h2>
+        </div>
+        <div class="bio-right">
+            <div class="bio-text">
+                <p>Playboi Carti rose from Atlanta's underground scene with a style built on hypnotic ad-libs, minimalist flows, and atmospheric production that redefined what hip-hop could sound like.</p>
+                <p>Beyond music, he became a cultural force — fusing punk attitude, gothic fashion, and internet mystique into a persona that influenced an entire generation.</p>
+            </div>
+            <div class="bio-metadata">
+                <div class="meta-row"><span class="meta-label">ID</span><span>JORDAN TERRELL CARTER</span></div>
+                <div class="meta-row"><span class="meta-label">BORN</span><span>SEPTEMBER 13, 1996</span></div>
+                <div class="meta-row"><span class="meta-label">LABEL</span><span>OPIUM / INTERSCOPE</span></div>
+                <div class="meta-row"><span class="meta-label">AESTHETIC</span><span>RAGE · PUNK · VAMP</span></div>
             </div>
         </div>
     </section>
 
-    <!-- QUOTES MARQUEE -->
-    <div class="quotes-strip">
-        <div class="quotes-track">
-            <span>SLATT++</span><span>WHAT?</span><span>VAMP</span><span>NEVER TOO
-                MUCH</span><span>HOMICIDE</span><span>KING VAMP</span><span>OPIUM</span><span>I AM MUSIC</span>
-            <span>SLATT++</span><span>WHAT?</span><span>VAMP</span><span>NEVER TOO
-                MUCH</span><span>HOMICIDE</span><span>KING VAMP</span><span>OPIUM</span><span>I AM MUSIC</span>
+    <!-- TIMELINE (HORIZONTAL) -->
+    <div class="timeline-wrapper" id="timeline-wrap">
+        <div class="timeline-container" id="timeline-cont">
+            <div class="timeline-year" data-cursor="VIEW">
+                <div class="year-num">2018</div>
+                <img src="carti-img/02_timeline_2018.png" alt="Die Lit" loading="lazy">
+                <h3 class="year-title">DIE LIT</h3>
+                <p class="year-desc">Debut Studio Album. Defining the "mumble rap" era with ethereal production.</p>
+            </div>
+            <div class="timeline-year" data-cursor="VIEW">
+                <div class="year-num">2020</div>
+                <img src="carti-img/03_timeline_2020.jpg" alt="WLR" loading="lazy">
+                <h3 class="year-title">WHOLE LOTTA RED</h3>
+                <p class="year-desc">Aggressive, punk-inspired shift. Expanding the boundaries of rage and the vamp persona.</p>
+            </div>
+            <div class="timeline-year" data-cursor="VIEW">
+                <div class="year-num">2024</div>
+                <div style="background:#000; aspect-ratio:3/4; display:flex; align-items:center; justify-content:center;">
+                    <img src="carti-img/04_timeline_2024.jpg" alt="MUSIC" style="width:100%;" loading="lazy">
+                </div>
+                <h3 class="year-title">I AM MUSIC</h3>
+                <p class="year-desc">The Industrial Era. Deep voice, monochromatic visuals, and boundary-pushing soundscapes.</p>
+            </div>
         </div>
     </div>
 
-    <!-- ═══════════ TIMELINE ═══════════ -->
-    <section id="timeline" data-theme="intro">
-        <div class="container">
-            <h2 class="section-title anim-element">The Journey</h2>
-            <div class="timeline">
-                <div class="timeline-item anim-element">
-                    <div class="timeline-year">2015</div>
-                    <div class="timeline-title">Awful Records Era</div>
-                    <div class="timeline-desc">Signed to Father's Awful Records. Released early underground hits like "Broke Boi" and "Fetti", establishing his repetitive, catchy Atlanta trap sound.</div>
+    <!-- AUDIO ARCHIVE -->
+    <section class="songs-section">
+        <h2 class="songs-header"><span class="text-reveal"><span class="text-reveal-inner">AUDIO ARCHIVE</span></span></h2>
+        <div class="songs-list">
+            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_01.mp3">
+                <div class="song-num">001</div>
+                <div class="song-title">MAGNOLIA</div>
+                <div class="song-album">PLAYBOI CARTI</div>
+            </div>
+            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_02.mp3">
+                <div class="song-num">002</div>
+                <div class="song-title">SHOOTA (FEAT. LIL UZI VERT)</div>
+                <div class="song-album">DIE LIT</div>
+            </div>
+            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_03.mp3">
+                <div class="song-num">003</div>
+                <div class="song-title">LONG TIME (INTRO)</div>
+                <div class="song-album">DIE LIT</div>
+            </div>
+            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_04.mp3">
+                <div class="song-num">004</div>
+                <div class="song-title">SKY</div>
+                <div class="song-album">WHOLE LOTTA RED</div>
+            </div>
+            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_05.mp3">
+                <div class="song-num">005</div>
+                <div class="song-title">STOP BREATHING</div>
+                <div class="song-album">WHOLE LOTTA RED</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISUAL GALLERY -->
+    <section class="gallery-section">
+        <div style="margin-bottom: 50px;">
+            <h2><span class="text-reveal"><span class="text-reveal-inner">VISUAL</span></span><br><span class="text-reveal"><span class="text-reveal-inner">AESTHETIC</span></span></h2>
+        </div>
+        <div class="masonry-grid">
+            <div class="masonry-item" data-cursor="VIEW">
+                <img src="carti-img/05_gallery_01.jpg" alt="Gallery" loading="lazy">
+                <div class="masonry-label">VINTAGE CARTI</div>
+            </div>
+            <div class="masonry-item" data-cursor="VIEW">
+                <img src="carti-img/06_gallery_02.jpg" alt="Gallery" loading="lazy">
+                <div class="masonry-label">OPIUM CREATIVE</div>
+            </div>
+            <div class="masonry-item" data-cursor="VIEW">
+                <img src="carti-img/07_gallery_03.jpg" alt="Gallery" loading="lazy">
+                <div class="masonry-label">VAMP AESTHETIC</div>
+            </div>
+            <div class="masonry-item" data-cursor="VIEW">
+                <img src="carti-img/08_gallery_04.jpg" alt="Gallery" loading="lazy">
+                <div class="masonry-label">STAGE PRESENCE</div>
+            </div>
+            <div class="masonry-item" data-cursor="VIEW">
+                <img src="carti-img/09_gallery_05.jpg" alt="Gallery" loading="lazy">
+                <div class="masonry-label">STUDIO SESSION</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OPIUM ROSTER -->
+    <section class="roster-section">
+        <h2><span class="text-reveal"><span class="text-reveal-inner">THE OPIUM</span></span><br><span class="text-reveal"><span class="text-reveal-inner">ROSTER</span></span></h2>
+        <div class="roster-grid">
+            <div class="roster-card" data-cursor="KEN">
+                <img src="carti-img/10_roster_ken.jpg" alt="Ken Carson" loading="lazy">
+                <div class="roster-info">
+                    <div class="roster-name">KEN<br>CARSON</div>
+                    <div class="roster-alias">A GREAT CHAOS</div>
                 </div>
-                <div class="timeline-item anim-element">
-                    <div class="timeline-year">2016</div>
-                    <div class="timeline-title">ASAP Mob Affiliation</div>
-                    <div class="timeline-desc">Signed to A$AP Mob's AWGE imprint and Interscope Records. Featured on the Cozy Tapes compilation, elevating his status in the fashion-rap crossover scene.</div>
+            </div>
+            <div class="roster-card" data-cursor="LONE">
+                <img src="carti-img/11_roster_lone.jpg" alt="Destroy Lonely" loading="lazy">
+                <div class="roster-info">
+                    <div class="roster-name">DESTROY<br>LONELY</div>
+                    <div class="roster-alias">NO STYLIST</div>
                 </div>
-                <div class="timeline-item anim-element">
-                    <div class="timeline-year">2017</div>
-                    <div class="timeline-title">Self-Titled & "Magnolia"</div>
-                    <div class="timeline-desc">Released his eponymous debut mixtape featuring the massive hit "Magnolia". The Pi'erre Bourne produced track became his mainstream breakthrough.</div>
-                </div>
-                <div class="timeline-item anim-element">
-                    <div class="timeline-year">2018—2020</div>
-                    <div class="timeline-title">Die Lit to WLR</div>
-                    <div class="timeline-desc">Dropped the critically acclaimed "Die Lit", followed by a massive aesthetic shift and the highly polarizing, culturally resetting "Whole Lotta Red".</div>
-                </div>
-                <div class="timeline-item anim-element">
-                    <div class="timeline-year">2021—Present</div>
-                    <div class="timeline-title">Opium & I AM MUSIC</div>
-                    <div class="timeline-desc">Founded the Opium label, shaping the next generation of underground rap (Ken Carson, Destroy Lonely). Preparing for his third studio album rollout.</div>
+            </div>
+            <div class="roster-card" data-cursor="GANG">
+                <img src="carti-img/12_roster_gang.jpg" alt="Homixide Gang" loading="lazy">
+                <div class="roster-info">
+                    <div class="roster-name">HOMIXIDE<br>GANG</div>
+                    <div class="roster-alias">5TH AMNDMNT</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="section-divider">
-        <div class="divider-symbol">SOUND</div>
-    </div>
-
-    <!-- ═══════════ SONGS ═══════════ -->
-    <section id="songs" data-theme="songs">
-        <div class="container">
-            <h2 class="section-title anim-element">Iconic Songs</h2>
-            <div class="songs-grid">
-                <div class="song-item anim-element" data-src="carti-img/Magnolia.mp3">
-                    <div class="song-num">01</div>
-                    <div class="song-info">
-                        <div class="song-title">Magnolia</div>
-                        <div class="song-album">Playboi Carti (2017)</div>
-                    </div>
-                    <div class="song-play"><i class="fas fa-play"></i></div>
-                </div>
-                <div class="song-item anim-element" data-src="carti-img/Shoota (feat. Lil Uzi Vert).mp3">
-                    <div class="song-num">02</div>
-                    <div class="song-info">
-                        <div class="song-title">Shoota (feat. Lil Uzi Vert)</div>
-                        <div class="song-album">Die Lit (2018)</div>
-                    </div>
-                    <div class="song-play"><i class="fas fa-play"></i></div>
-                </div>
-                <div class="song-item anim-element" data-src="carti-img/1-01 Long Time (Intro).mp3">
-                    <div class="song-num">03</div>
-                    <div class="song-info">
-                        <div class="song-title">Long Time (Intro)</div>
-                        <div class="song-album">Die Lit (2018)</div>
-                    </div>
-                    <div class="song-play"><i class="fas fa-play"></i></div>
-                </div>
-                <div class="song-item anim-element" data-src="carti-img/Playboi Carti - Sky.mp3">
-                    <div class="song-num">04</div>
-                    <div class="song-info">
-                        <div class="song-title">Sky</div>
-                        <div class="song-album">Whole Lotta Red (2020)</div>
-                    </div>
-                    <div class="song-play"><i class="fas fa-play"></i></div>
-                </div>
-                <div class="song-item anim-element" data-src="carti-img/1-04 Stop Breathing.mp3">
-                    <div class="song-num">05</div>
-                    <div class="song-info">
-                        <div class="song-title">Stop Breathing</div>
-                        <div class="song-album">Whole Lotta Red (2020)</div>
-                    </div>
-                    <div class="song-play"><i class="fas fa-play"></i></div>
-                </div>
-            </div>
-            <div class="audio-player-wrap" id="audio-player-wrap" style="display:none;">
-                <div class="now-playing-label" id="now-playing-label">NOW PLAYING</div>
-                <audio id="audio-player" controls></audio>
-            </div>
+    <!-- FASHION LOOKBOOK -->
+    <section class="lookbook-section">
+        <div class="lookbook-sticky">
+            <h2>FASHION<br>ARCHIVE</h2>
+            <p style="font-family: var(--font-mono); font-size: 12px; color: #444; margin-top: 30px; text-transform: uppercase;">EDITORIAL / VOL. 01<br>PARIS • MILAN • ATLANTA</p>
         </div>
-    </section>
-
-    <div class="section-divider">
-        <div class="divider-symbol">ERAS</div>
-    </div>
-
-    <!-- ═══════════ DIE LIT ═══════════ -->
-    <section id="dielit" data-theme="dielit">
-        <div class="container">
-            <h2 class="section-title anim-element">2018</h2>
-            <div class="era-content">
-                <div class="era-text anim-element">
-                    <h3>DIE LIT</h3>
-                    <p>Focused on high-energy beats and repetitive flows, creating a hypnotic, punk-infused masterpiece.
-                    </p>
-                    <p>This era defined modern trap, turning moshpits into a staple of underground hip-hop culture.
-                        Carti's stage dives became legendary — fueled by Pi'erre Bourne's ethereal production.</p>
+        <div class="lookbook-gallery">
+            <div class="lookbook-item" data-cursor="LENS">
+                <img src="carti-img/13_lookbook_01.jpg" alt="Lookbook" loading="lazy">
+                <div class="lookbook-caption">
+                    <span>ARCHIVE LOOK / I</span>
+                    <span>DESIGNER ARCHIVE</span>
                 </div>
-                <div class="era-visual anim-element">
-                    <img src="carti-img/die-lit.png" alt="Die Lit Cover" loading="lazy"
-                        onerror="this.src='https://upload.wikimedia.org/wikipedia/en/2/25/Die_Lit_by_Playboi_Carti.jpg'">
+            </div>
+            <div class="lookbook-item" data-cursor="LENS">
+                <img src="carti-img/14_lookbook_02.jpg" alt="Lookbook" loading="lazy">
+                <div class="lookbook-caption">
+                    <span>EDITORIAL / II</span>
+                    <span>RUNWAY SELECTION</span>
+                </div>
+            </div>
+            <div class="lookbook-item" data-cursor="LENS">
+                <img src="carti-img/15_lookbook_03.jpg" alt="Lookbook" loading="lazy">
+                <div class="lookbook-caption">
+                    <span>STAGE GEAR / III</span>
+                    <span>CUSTOM PIECE</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════ WLR ═══════════ -->
-    <section id="wlr" data-theme="wlr">
-        <div class="container">
-            <h2 class="section-title anim-element">2020</h2>
-            <div class="era-content reverse">
-                <div class="era-text anim-element">
-                    <h3>WHOLE LOTTA RED</h3>
-                    <p>A polarizing, aggressive shift introducing the punk-inspired rage sound, distorted synths, and
-                        screaming vocals.</p>
-                    <p>The birth of the "Vamp" aesthetic. High contrast, blood red, and chaotic structure completely
-                        shifted the meta. What was once hated became the blueprint.</p>
-                </div>
-                <div class="era-visual anim-element">
-                    <img src="carti-img/wlr-art.webp" alt="Whole Lotta Red" loading="lazy"
-                        onerror="this.src='https://upload.wikimedia.org/wikipedia/en/6/6c/Playboi_Carti_-_Whole_Lotta_Red.png'">
-                </div>
-            </div>
+    <!-- SONIC EVOLUTION -->
+    <section class="evolution-section">
+        <div class="evo-title" data-cursor="WARP">SONIC<br>EVOLUTION</div>
+        <div class="evo-desc">
+            EXPERIMENTING WITH VOCAL FREQUENCIES. FROM THE HIGH-PITCHED "BABY VOICE" OF THE PLUGG ERA TO THE GRITTY, INDUSTRIAL DEEP VOICE OF "I AM MUSIC". A CONSTANT STATE OF REINVENTION.
         </div>
+        <div class="divider-line"></div>
     </section>
 
-    <!-- ═══════════ MUSIC ═══════════ -->
-    <section id="music" data-theme="music">
-        <div class="container">
-            <h2 class="section-title anim-element">2024–2025</h2>
-            <div class="era-content">
-                <div class="era-text anim-element">
-                    <h3>I AM MUSIC</h3>
-                    <p>Deeper voices, ambient soundscapes, and a more elusive, mysterious persona. The chaotic rage
-                        evolves into calculated darkness.</p>
-                    <p>Industrial textures, lo-fi aesthetics, and cold minimalism. Carti steps fully into the role of a
-                        fashion-forward, untouchable figure.</p>
-                </div>
-                <div class="era-visual anim-element">
-                    <img src="carti-img/i-am-music.svg" alt="I AM MUSIC" loading="lazy"
-                        onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/7/7a/Playboi_Carti_2016.jpg'">
-                </div>
-            </div>
-        </div>
+    <!-- TOUR -->
+    <section class="tour-section">
+        <h2 style="font-size: 5vw; margin-bottom: 50px;">LIVE EXPERIENCE</h2>
+        <table class="tour-table">
+            <thead>
+                <tr>
+                    <th>CITY / TERMINAL</th>
+                    <th>DATE</th>
+                    <th>VENUE</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-cursor="VIEW">
+                    <td>ATLANTA, GA</td>
+                    <td>10.24.25</td>
+                    <td>STATE FARM ARENA</td>
+                    <td><span class="tour-status sold-out">SOLD OUT</span></td>
+                </tr>
+                <tr data-cursor="VIEW">
+                    <td>NEW YORK, NY</td>
+                    <td>11.05.25</td>
+                    <td>MADISON SQUARE GARDEN</td>
+                    <td><span class="tour-status sold-out">SOLD OUT</span></td>
+                </tr>
+                <tr data-cursor="VIEW">
+                    <td>LONDON, UK</td>
+                    <td>12.12.25</td>
+                    <td>THE O2</td>
+                    <td><span class="tour-status">AVAILABLE</span></td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 
-    <div class="section-divider">
-        <div class="divider-symbol">EMPIRE</div>
-    </div>
-
-    <!-- ═══════════ OPIUM LABEL ═══════════ -->
-    <section id="opium" data-theme="opium">
-        <div class="container">
-            <h2 class="section-title anim-element">OPIUM LABEL</h2>
-            <p class="anim-element" style="color:var(--text-muted); font-size:1.1rem; max-width:600px; margin-bottom:20px;">
-                Carti's imprint is more than a record label; it's an aesthetic movement. Opium artists share the same gothic, high-fashion sensibilities and distorted sonic palettes.
-            </p>
-            <div class="roster-grid">
-                <div class="roster-card anim-element">
-                    <img src="carti-img/carti-iverson.webp" alt="Carti" class="roster-img">
-                    <div class="roster-name">PLAYBOI CARTI</div>
-                    <div class="roster-role">FOUNDER / CEO</div>
-                </div>
-                <div class="roster-card anim-element">
-                    <img src="carti-img/kencarson.jpg" alt="Ken Carson" class="roster-img" style="filter: grayscale(0.5) contrast(1.1);">
-                    <div class="roster-name">KEN CARSON</div>
-                    <div class="roster-role">"A GREAT CHAOS"</div>
-                </div>
-                <div class="roster-card anim-element">
-                    <img src="carti-img/destroylonely.jpg" alt="Destroy Lonely" class="roster-img" style="filter: grayscale(0.5) contrast(1.1);">
-                    <div class="roster-name">DESTROY LONELY</div>
-                    <div class="roster-role">"IF LOOKS COULD KILL"</div>
-                </div>
-                <div class="roster-card anim-element">
-                    <img src="carti-img/HomixideGang.jpg" alt="Homixide Gang" class="roster-img" style="filter: grayscale(0.5) contrast(1.1);">
-                    <div class="roster-name">HOMIXIDE GANG</div>
-                    <div class="roster-role">"SNOT OR NOT"</div>
-                </div>
-            </div>
-        </div>
+    <!-- GENERATOR -->
+    <section class="gen-section" data-cursor="GENERATE">
+        <div class="gen-label">ENCRYPTED PHRASE GENERATOR /// DECRYPT</div>
+        <div class="gen-phrase" id="gen-phrase">S L A T T * +</div>
     </section>
 
-    <div class="section-divider">
-        <div class="divider-symbol">LIVE</div>
-    </div>
-
-    <!-- ═══════════ LIVE EXPERIENCE ═══════════ -->
-    <section id="live" data-theme="live">
-        <div class="container">
-            <h2 class="section-title anim-element" style="color: var(--text-color); border-bottom-color: var(--accent-color);">LIVE EXPERIENCE</h2>
-            <div class="era-content reverse" style="margin-bottom: 50px;">
-                <div class="era-text anim-element">
-                    <h3 style="color:var(--accent-color);">THE MOSHPIT METAVERSE</h3>
-                    <p>A Playboi Carti concert is not a performance; it is a ritual. Guitarist Oji shredding distorted riffs over DJ Blak Boy's 808s. Dense smoke. Blinding strboes transcending boundaries.</p>
-                    <p>It is raw, unadulterated punk energy channeled through modern trap production.</p>
-                </div>
-                <div class="era-visual anim-element">
-                    <img src="carti-img/carticoncert.jpg.webp" alt="Live Concert" style="filter: grayscale(0.2) contrast(1.1);">
-                </div>
-            </div>
-
-            <table class="tour-dates anim-element">
-                <tbody>
-                    <tr>
-                        <td class="tour-date">OCT 31</td>
-                        <td>
-                            <div class="tour-city">LOS ANGELES, CA</div>
-                            <div class="tour-venue">Crypto.com Arena</div>
-                        </td>
-                        <td class="tour-btn-td"><button class="btn" style="padding: 10px 20px; font-size: 0.9rem;">SOLD OUT</button></td>
-                    </tr>
-                    <tr>
-                        <td class="tour-date">NOV 04</td>
-                        <td>
-                            <div class="tour-city">LAS VEGAS, NV</div>
-                            <div class="tour-venue">MGM Grand Garden</div>
-                        </td>
-                        <td class="tour-btn-td"><button class="btn" style="padding: 10px 20px; font-size: 0.9rem;">TICKETS</button></td>
-                    </tr>
-                    <tr>
-                        <td class="tour-date">NOV 08</td>
-                        <td>
-                            <div class="tour-city">CHICAGO, IL</div>
-                            <div class="tour-venue">United Center</div>
-                        </td>
-                        <td class="tour-btn-td"><button class="btn" style="padding: 10px 20px; font-size: 0.9rem;">TICKETS</button></td>
-                    </tr>
-                    <tr>
-                        <td class="tour-date">DEC 25</td>
-                        <td>
-                            <div class="tour-city">ATLANTA, GA</div>
-                            <div class="tour-venue">State Farm Arena</div>
-                        </td>
-                        <td class="tour-btn-td"><button class="btn" style="padding: 10px 20px; font-size: 0.9rem;">UNAVAILABLE</button></td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- GLOBAL PLAYER -->
+    <div class="global-player" id="global-player">
+        <div class="player-info">
+            <div class="player-status"></div>
+            <span id="player-track">NO SIGNAL</span>
         </div>
-    </section>
-
-    <!-- ═══════════ GALLERY ═══════════ -->
-    <section id="gallery" data-theme="gallery">
-        <div class="container">
-            <h2 class="section-title anim-element">Aesthetics</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item anim-element">
-                    <img src="carti-img/awgecarti.jpg" alt="AWGE Era">
-                    <div class="gallery-overlay"><div class="gallery-caption">AWGE Era</div></div>
-                </div>
-                <div class="gallery-item anim-element">
-                    <img src="carti-img/wlrcarti.jpg" alt="Whole Lotta Red Era">
-                    <div class="gallery-overlay"><div class="gallery-caption">King Vamp</div></div>
-                </div>
-                <div class="gallery-item anim-element">
-                    <img src="carti-img/narcissistcarti.jpg.webp" alt="Narcissist Era">
-                    <div class="gallery-overlay"><div class="gallery-caption">Narcissist</div></div>
-                </div>
-                <div class="gallery-item anim-element">
-                    <img src="carti-img/musiccarti.jpg" alt="I AM MUSIC Era">
-                    <div class="gallery-overlay"><div class="gallery-caption">I AM MUSIC</div></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- QUOTES MARQUEE 2 -->
-    <div class="quotes-strip">
-        <div class="quotes-track" style="animation-direction: reverse;">
-            <span>ROCKSTAR MADE</span><span>WE ON X</span><span>STOP BREATHING</span><span>LONG
-                TIME</span><span>MAGNOLIA</span><span>SKY</span><span>SHOOTA</span><span>RAGE</span>
-            <span>ROCKSTAR MADE</span><span>WE ON X</span><span>STOP BREATHING</span><span>LONG
-                TIME</span><span>MAGNOLIA</span><span>SKY</span><span>SHOOTA</span><span>RAGE</span>
+        <div class="player-controls">
+            <audio id="audio-el" controls></audio>
         </div>
     </div>
 
-    <!-- ═══════════ INFLUENCE ═══════════ -->
-    <section id="influence" data-theme="influence">
-        <div class="container">
-            <h2 class="section-title anim-element">Cultural Impact</h2>
-            <div class="influence-grid">
-                <div class="influence-card anim-element">
-                    <div class="card-icon"><i class="fas fa-bolt"></i></div>
-                    <h4>Rage Music Pioneer</h4>
-                    <p>Carti didn't just participate in the rage subgenre — he created the template. WLR's chaotic beats
-                        and screaming delivery became the DNA of artists like Ken Carson, Destroy Lonely, and an entire
-                        SoundCloud wave. His ad-lib style ("What?", "SLATT") became a universal language in modern
-                        hip-hop.</p>
-                </div>
-                <div class="influence-card anim-element">
-                    <div class="card-icon"><i class="fas fa-tshirt"></i></div>
-                    <h4>Fashion & Youth Culture</h4>
-                    <p>He blurred the line between streetwear and high fashion. His relationship with Rick Owens, Raf
-                        Simons, and Balenciaga made underground designer labels cool to Gen-Z. The all-black, oversized,
-                        goth-punk look became the uniform of a generation raised on TikTok and SoundCloud.</p>
-                </div>
-                <div class="influence-card anim-element">
-                    <div class="card-icon"><i class="fas fa-crown"></i></div>
-                    <h4>Luxury & Brand Power</h4>
-                    <p>Carti transcended music into a fashion icon: Givenchy campaigns, Virgil Abloh collaborations,
-                        Paris Fashion Week front rows. His label Opium is a brand itself — a symbol of elite,
-                        mysterious, anti-mainstream energy that luxury houses now chase for cultural relevance.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="section-divider">
-        <div class="divider-symbol">⚡</div>
-    </div>
-
-    <!-- ═══════════ GENERATOR ═══════════ -->
-    <section id="generator" data-theme="generator">
-        <div class="container" style="text-align:center;">
-            <h2 class="section-title anim-element" style="margin-bottom:4rem;">Carti Energy</h2>
-            <div class="gen-btn-wrap anim-element">
-                <div class="gen-btn-glow"></div>
-                <button class="gen-btn" id="gen-btn">⚡ AWAKEN ⚡</button>
-            </div>
-            <div id="phrase-display"></div>
-        </div>
-    </section>
-
-    <footer data-theme="intro">
-        <p style="letter-spacing:3px;">A Visual Tribute · Scroll-Driven Architecture</p>
-        <div>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-spotify"></i></a>
-        </div>
-    </footer>
-
+    <!-- SCRIPTS -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+    
     <script>
-        // ═══ LOADER ═══
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hide');
-                setTimeout(() => document.getElementById('loader').remove(), 600);
-            }, 2000);
-        });
+        gsap.registerPlugin(ScrollTrigger);
 
-        // ═══ CUSTOM CURSOR ═══
-        const dot = document.getElementById('cursor-dot');
-        const ring = document.getElementById('cursor-ring');
-        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-
-        document.addEventListener('mousemove', e => {
-            mouseX = e.clientX; mouseY = e.clientY;
-            dot.style.left = mouseX - 4 + 'px';
-            dot.style.top = mouseY - 4 + 'px';
-        });
-
-        function animateRing() {
-            ringX += (mouseX - ringX) * 0.15;
-            ringY += (mouseY - ringY) * 0.15;
-            ring.style.left = ringX - 17.5 + 'px';
-            ring.style.top = ringY - 17.5 + 'px';
-            requestAnimationFrame(animateRing);
-        }
-        animateRing();
-
-        // Cursor hover effect on interactive elements
-        document.querySelectorAll('a, button, .song-item, .dot, .influence-card').forEach(el => {
-            el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-            el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
-        });
-
-        // ═══ SCROLL PROGRESS BAR ═══
-        const progressBar = document.getElementById('scroll-progress');
-        window.addEventListener('scroll', () => {
-            const scrollTop = document.documentElement.scrollTop;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            progressBar.style.width = (scrollTop / docHeight * 100) + '%';
-        }, { passive: true });
-
-        // ═══ HERO PARTICLES ═══
-        const particleContainer = document.getElementById('hero-particles');
-        for (let i = 0; i < 30; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + '%';
-            p.style.animationDuration = (5 + Math.random() * 10) + 's';
-            p.style.animationDelay = Math.random() * 5 + 's';
-            p.style.width = p.style.height = (1 + Math.random() * 3) + 'px';
-            particleContainer.appendChild(p);
-        }
-
-        // ═══ THEME SWITCH ═══
-        const sections = document.querySelectorAll('section[data-theme], footer[data-theme]');
-        const dots2 = document.querySelectorAll('.dot');
-        const body = document.body;
-
-        const themeObserver = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    body.className = 'theme-' + entry.target.getAttribute('data-theme');
-                    const id = entry.target.id;
-                    if (id) dots2.forEach(d => d.classList.toggle('active', d.getAttribute('data-target') === id));
-                }
+        // 1. LENIS
+        let lenis;
+        try {
+            lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
             });
-        }, { threshold: 0.5 });
-        sections.forEach(s => themeObserver.observe(s));
-
-        dots2.forEach(d => d.addEventListener('click', () => {
-            const t = document.getElementById(d.getAttribute('data-target'));
-            if (t) t.scrollIntoView({ behavior: 'smooth' });
-        }));
-
-        // ═══ ENTER BUTTON ═══
-        document.getElementById('enter-btn').addEventListener('click', () => {
-            document.getElementById('bio').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // ═══ FADE-IN ═══
-        const animEls = document.querySelectorAll('.anim-element');
-        const appearObs = new IntersectionObserver((entries, obs) => {
-            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-        animEls.forEach(el => appearObs.observe(el));
-
-        // ═══ SONG PLAYER ═══
-        const songItems = document.querySelectorAll('.song-item');
-        const audioPlayer = document.getElementById('audio-player');
-        const audioWrap = document.getElementById('audio-player-wrap');
-        const nowLabel = document.getElementById('now-playing-label');
-        let currentPlaying = null;
-
-        songItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const src = item.getAttribute('data-src');
-                if (!src) return;
-                if (currentPlaying === item && !audioPlayer.paused) {
-                    audioPlayer.pause();
-                    item.querySelector('.song-play i').className = 'fas fa-play';
-                    return;
-                }
-                if (currentPlaying === item && audioPlayer.paused) {
-                    audioPlayer.play();
-                    item.querySelector('.song-play i').className = 'fas fa-pause';
-                    return;
-                }
-                songItems.forEach(s => { s.classList.remove('active-song'); s.querySelector('.song-play i').className = 'fas fa-play'; });
-                item.classList.add('active-song');
-                item.querySelector('.song-play i').className = 'fas fa-pause';
-                currentPlaying = item;
-                nowLabel.textContent = 'NOW PLAYING — ' + item.querySelector('.song-title').textContent.toUpperCase();
-                audioPlayer.src = src;
-                audioWrap.style.display = 'block';
-                audioPlayer.play();
-                audioWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            });
-        });
-
-        audioPlayer.addEventListener('ended', () => {
-            if (currentPlaying) {
-                currentPlaying.querySelector('.song-play i').className = 'fas fa-play';
-                currentPlaying.classList.remove('active-song');
-                currentPlaying = null;
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
             }
+            requestAnimationFrame(raf);
+            lenis.on('scroll', ScrollTrigger.update);
+            gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+            gsap.ticker.lagSmoothing(0);
+        } catch (e) {
+            console.warn('Lenis failed to initialize:', e);
+        }
+
+        // 2. CURSOR
+        const cursor = document.getElementById('cursor');
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; 
+            mouseY = e.clientY;
+            cursor.style.opacity = 1;
+            gsap.to(cursor, {
+                x: mouseX,
+                y: mouseY,
+                duration: 0.1,
+                ease: "none"
+            });
         });
 
-        // ═══ PHRASE GENERATOR ═══
-        const phrases = ["SLATT++*!", "WHAT? WHAT?", "VAMP LIFE 🧛", "NEVER TOO MUCH", "HOMICIDE!!", "KING VAMP ^*", "RAGE ⚡", "OPIUM*+ :)", "I AM MUSIC", "++* OK !", "ROCKSTAR MADE", "STOP BREATHING", "WE ON X 🦇"];
-        const genBtn = document.getElementById('gen-btn');
-        const phraseDisplay = document.getElementById('phrase-display');
-        let isGen = false;
-
-        genBtn.addEventListener('click', () => {
-            if (isGen) return;
-            isGen = true;
-            phraseDisplay.classList.add('glitching');
-            genBtn.style.pointerEvents = 'none';
-            let flashes = 0, speed = 40;
-            function step() {
-                phraseDisplay.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-                flashes++;
-                if (flashes >= 12) {
-                    phraseDisplay.classList.remove('glitching');
-                    phraseDisplay.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-                    phraseDisplay.style.textShadow = '0 0 40px var(--accent-color), 0 0 80px var(--accent-color)';
-                    genBtn.style.pointerEvents = '';
-                    isGen = false;
-                    setTimeout(() => { phraseDisplay.style.textShadow = '0 0 15px var(--accent-color)'; }, 1500);
+        document.querySelectorAll('[data-cursor]').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                const state = el.getAttribute('data-cursor');
+                cursor.classList.add('active');
+                if (state === 'LENS') {
+                    cursor.classList.add('viewfinder');
+                    cursor.innerText = '';
                 } else {
-                    speed = flashes < 6 ? speed * 0.85 : speed * 1.3;
-                    setTimeout(step, speed);
+                    cursor.innerText = state;
                 }
-            }
-            step();
+                gsap.to(cursor, { opacity: 1, duration: 0.3 });
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('active');
+                cursor.classList.remove('viewfinder');
+                cursor.innerText = '';
+            });
         });
 
-        // ═══ PARALLAX on hero image ═══
-        const heroImg = document.querySelector('.hero-img');
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            if (scrollY < window.innerHeight) {
-                heroImg.style.transform = 'translate(-50%, calc(-50% + ' + (scrollY * 0.3) + 'px))';
-                heroImg.style.opacity = Math.max(0, 0.2 - scrollY / (window.innerHeight * 2));
+        // 2.5 SKEW ON SCROLL
+        let proxy = { skew: 0 },
+            skewSetter = gsap.quickSetter(".text-reveal-inner, .roster-card img, .evo-title, .masonry-item img", "skewY", "deg"),
+            clamp = gsap.utils.clamp(-15, 15);
+
+        ScrollTrigger.create({
+            onUpdate: (self) => {
+                let skew = clamp(self.getVelocity() / -500);
+                if (Math.abs(skew) > Math.abs(proxy.skew)) {
+                    proxy.skew = skew;
+                    gsap.to(proxy, {
+                        skew: 0, 
+                        duration: 0.8, 
+                        ease: "power3", 
+                        overwrite: true, 
+                        onUpdate: () => skewSetter(proxy.skew)
+                    });
+                }
             }
-        }, { passive: true });
+        });
+
+        // 3. LOADER
+        document.addEventListener('DOMContentLoaded', () => {
+            const percEl = document.getElementById('loader-perc');
+            const loaderObj = { val: 0 };
+            
+            // Failsafe: Force reveal after 3 seconds if loader hangs
+            const failsafe = setTimeout(() => {
+                revealSite();
+            }, 3000);
+
+            const revealSite = () => {
+                clearTimeout(failsafe);
+                gsap.to('.loader', {
+                    clipPath: "polygon(0 0, 100% 0, 100% 0%, 0 0%)",
+                    duration: 1.2,
+                    ease: "power4.inOut",
+                    onComplete: () => {
+                        document.querySelector('.loader').style.display = 'none';
+                    }
+                });
+                // Initial animations
+                gsap.from('.hero-marquee span', { y: 200, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.5 });
+                gsap.from('.hero-img-wrap', { scale: 0.8, opacity: 0, duration: 1.5, ease: "power4.out", delay: 0.7 });
+            };
+
+            gsap.to(loaderObj, {
+                val: 100,
+                duration: 1.2,
+                ease: "expo.inOut",
+                onUpdate: () => {
+                    if (percEl) percEl.innerText = Math.round(loaderObj.val).toString().padStart(3, '0');
+                },
+                onComplete: revealSite
+            });
+        });
+
+        // 4. CLOCK
+        setInterval(() => {
+            document.getElementById('time-nav').innerText = new Date().toLocaleTimeString('en-US', { hour12: false }) + ' EST';
+        }, 1000);
+
+        // 5. PARALLAX
+        document.querySelectorAll('[data-speed]').forEach(el => {
+            const speed = parseFloat(el.getAttribute('data-speed'));
+            gsap.to(el, {
+                y: -100 * (speed - 1),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        });
+
+        // 6. REVEALS
+        document.querySelectorAll('.text-reveal-inner').forEach(rev => {
+            gsap.to(rev, {
+                y: "0%",
+                duration: 1.2,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: rev,
+                    start: "top 95%",
+                }
+            });
+        });
+
+        // 7. HORIZONTAL SCROLL
+        const tlCont = document.getElementById('timeline-cont');
+        const tlWrap = document.getElementById('timeline-wrap');
+        gsap.to(tlCont, {
+            x: () => -(tlCont.scrollWidth - window.innerWidth),
+            ease: "none",
+            scrollTrigger: {
+                trigger: tlWrap,
+                start: "top top",
+                end: () => "+=" + tlCont.scrollWidth,
+                scrub: 1,
+                pin: true,
+                invalidateOnRefresh: true
+            }
+        });
+
+        // 7.5 ROSTER STAGGER
+        gsap.from(".roster-card", {
+            y: 100,
+            opacity: 0,
+            duration: 1.2,
+            stagger: 0.2,
+            ease: "power4.out",
+            scrollTrigger: {
+                trigger: ".roster-grid",
+                start: "top 80%"
+            }
+        });
+
+        // 7.6 SONIC WARP
+        gsap.to(".evo-title", {
+            scrollTrigger: {
+                trigger: ".evolution-section",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            },
+            scaleX: 1.4,
+            skewX: 15,
+            ease: "none"
+        });
+
+        // 8. PLAYER
+        const player = document.getElementById('global-player');
+        const audioEl = document.getElementById('audio-el');
+        const trackTitle = document.getElementById('player-track');
+        document.querySelectorAll('.song-row').forEach(row => {
+            row.addEventListener('click', () => {
+                const title = row.querySelector('.song-title').innerText;
+                trackTitle.innerText = `NOW PLAYING — ${title}`;
+                audioEl.src = row.getAttribute('data-src');
+                audioEl.play();
+                gsap.to(player, { y: 0, duration: 0.8, ease: "power4.out" });
+            });
+        });
+
+        // 9. DECIPHER
+        const phrases = ["S L A T T * +", "W H A T ?", "V A M P   L I F E", "0 P 1 U M", "N E V E R   T O O   M U C H", "I   A M   M U S I C"];
+        const chars = "!<>-_\\/[]{}—=+*^?#_";
+        const genPhrase = document.getElementById('gen-phrase');
+        document.querySelector('.gen-section').addEventListener('click', () => {
+            const target = phrases[Math.floor(Math.random() * phrases.length)];
+            let iterations = 0;
+            const interval = setInterval(() => {
+                genPhrase.innerText = target.split('').map((c, i) => {
+                    if (c === ' ') return ' ';
+                    if (i < iterations) return target[i];
+                    return chars[Math.floor(Math.random() * chars.length)];
+                }).join('');
+                if (iterations >= target.length) clearInterval(interval);
+                iterations += 1/3;
+            }, 30);
+        });
+
+        // 10. HERO EFFECTS
+        const marqueeInners = document.querySelectorAll('.marquee-inner');
+        
+        // Infinite Loop
+        gsap.to(marqueeInners, {
+            xPercent: -100,
+            repeat: -1,
+            duration: 20,
+            ease: "none"
+        });
+
+        // Mouse Parallax
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const xPos = (clientX / window.innerWidth - 0.5) * 40;
+            const yPos = (clientY / window.innerHeight - 0.5) * 40;
+            
+            gsap.to("#hero-marquee", {
+                x: xPos,
+                y: yPos,
+                duration: 1,
+                ease: "power2.out"
+            });
+            
+            gsap.to("#hero-img", {
+                x: -xPos * 1.5,
+                y: -yPos * 1.5,
+                duration: 1.2,
+                ease: "power3.out"
+            });
+        });
     </script>
 </body>
-
 </html>
