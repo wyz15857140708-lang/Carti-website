@@ -473,21 +473,6 @@
             .timeline-year { width: 80vw; }
             .masonry-grid { column-count: 1; }
         }
-        /* ═══ DEBUG LOGGER ═══ */
-        #debug-log {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.8);
-            color: #0f0;
-            font-family: var(--font-mono);
-            font-size: 10px;
-            padding: 10px;
-            z-index: 10000;
-            max-width: 300px;
-            pointer-events: none;
-            display: none; /* Hidden by default, show with ?debug=true or similar */
-        }
     </style>
 </head>
 <body>
@@ -577,27 +562,27 @@
     <section class="songs-section">
         <h2 class="songs-header"><span class="text-reveal"><span class="text-reveal-inner">AUDIO ARCHIVE</span></span></h2>
         <div class="songs-list">
-            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_01.mp3">
+            <div class="song-row" data-cursor="PLAY" data-src="./carti-img/audio_01.mp3">
                 <div class="song-num">001</div>
                 <div class="song-title">MAGNOLIA</div>
                 <div class="song-album">PLAYBOI CARTI</div>
             </div>
-            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_02.mp3">
+            <div class="song-row" data-cursor="PLAY" data-src="./carti-img/audio_02.mp3">
                 <div class="song-num">002</div>
                 <div class="song-title">SHOOTA (FEAT. LIL UZI VERT)</div>
                 <div class="song-album">DIE LIT</div>
             </div>
-            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_03.mp3">
+            <div class="song-row" data-cursor="PLAY" data-src="./carti-img/audio_03.mp3">
                 <div class="song-num">003</div>
                 <div class="song-title">LONG TIME (INTRO)</div>
                 <div class="song-album">DIE LIT</div>
             </div>
-            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_04.mp3">
+            <div class="song-row" data-cursor="PLAY" data-src="./carti-img/audio_04.mp3">
                 <div class="song-num">004</div>
                 <div class="song-title">SKY</div>
                 <div class="song-album">WHOLE LOTTA RED</div>
             </div>
-            <div class="song-row" data-cursor="PLAY" data-src="carti-img/audio_05.mp3">
+            <div class="song-row" data-cursor="PLAY" data-src="./carti-img/audio_05.mp3">
                 <div class="song-num">005</div>
                 <div class="song-title">STOP BREATHING</div>
                 <div class="song-album">WHOLE LOTTA RED</div>
@@ -736,8 +721,6 @@
             </tbody>
         </table>
     </section>
-
-    <div id="debug-log">INIT: WAITING...</div>
     
     <!-- GENERATOR -->
     <section class="gen-section" data-cursor="GENERATE">
@@ -762,22 +745,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
     
     <script>
-        const debugEl = document.getElementById('debug-log');
-        function log(msg) {
-            console.log(msg);
-            if(debugEl) {
-                debugEl.style.display = 'block';
-                debugEl.innerText = msg + "\n" + debugEl.innerText;
-            }
-        }
-
-        log("CARTI ARCHIVE: Script Initializing...");
-
-        // Debug: Track all clicks
-        window.addEventListener('click', (e) => {
-            log("Click Target: " + e.target.tagName + " " + (e.target.className || ""));
-        });
-
         gsap.registerPlugin(ScrollTrigger);
 
         // 1. LENIS SMOOTH SCROLL
@@ -975,13 +942,11 @@
             row.addEventListener('click', () => {
                 const title = row.querySelector('.song-title').innerText;
                 const src = row.getAttribute('data-src');
-                log("Song Clicked: " + title + " | Source: " + src);
                 
                 trackTitle.innerText = `LOADING — ${title}`;
                 playerStatus.innerText = "BUFF";
                 
                 audioEl.src = src;
-                log("Full Audio Path: " + audioEl.src);
                 
                 // Show player immediately
                 gsap.to(player, { y: 0, duration: 0.8, ease: "power4.out" });
@@ -991,11 +956,10 @@
                     playPromise.then(_ => {
                         trackTitle.innerText = `NOW PLAYING — ${title}`;
                         playerStatus.innerText = "PLAY";
-                        log("Playback Success");
                     }).catch(error => {
-                        trackTitle.innerText = `${error.name} — ${title}`;
+                        console.error("Playback failed:", error);
+                        trackTitle.innerText = `ERROR — ${title}`;
                         playerStatus.innerText = "FAIL";
-                        log("Playback Fail: " + error.name + " | " + error.message);
                     });
                 }
             });
@@ -1004,14 +968,12 @@
         // Diagnostic listener
         audioEl.addEventListener('error', (e) => {
             const errorMap = {
-                1: "MEDIA_ERR_ABORTED",
-                2: "MEDIA_ERR_NETWORK",
-                3: "MEDIA_ERR_DECODE",
-                4: "MEDIA_ERR_SRC_NOT_SUPPORTED"
+                1: "ABORTED",
+                2: "NETWORK",
+                3: "DECODE",
+                4: "404 NOT FOUND"
             };
-            const msg = `SRC ERROR: ${errorMap[audioEl.error.code] || 'UNKNOWN'}`;
-            log(msg);
-            trackTitle.innerText = msg;
+            trackTitle.innerText = `SRC ERROR: ${errorMap[audioEl.error.code] || 'UNKNOWN'}`;
         });
 
         // 9. DECIPHER
